@@ -1,10 +1,16 @@
 package com.e.taskapp_1;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.ViewPager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.support.v4.view.GravityCompat;
@@ -16,16 +22,34 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.widget.TableLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    TaskAdapter adapter;
+    List<Task> list;
     TextView textView1;
-    TextView textView2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+        SharedPreferences pref = getSharedPreferences("MY_DATA",MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences("settings", Context.MODE_PRIVATE);
+        boolean isShown = preferences.getBoolean("isShown",false);
+        if (!isShown){
+            startActivity(new Intent(this, OnBoardActivity.class));
+            finish();
+        }
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -47,14 +71,29 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+        initList();
+    }
+
+    private void initList() {
+        list = new ArrayList<>();
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        list.addAll(App.getDataBase().taskDao().getAll());
+        adapter = new TaskAdapter(list);
+        recyclerView.setAdapter(adapter);
+
+        for (Task task:list){
+            Log.e("TAG","task = "+task.getTitle());
+        }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == 100){
             if (resultCode == RESULT_OK){
-                String title = data.getStringExtra(FormActivity.RESULT_KEY);
-                Log.d("getText",title);
+                list.clear();
+                list.addAll(App.getDataBase().taskDao().getAll());
+                adapter.notifyDataSetChanged();
             }
         }
     }

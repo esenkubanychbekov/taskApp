@@ -1,6 +1,8 @@
 package com.e.taskapp_1;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -12,43 +14,52 @@ public class FormActivity extends AppCompatActivity {
 
     public static String RESULT_KEY = "text_key";
 
-    EditText editTitle;
-    EditText editDesc;
-    Button cancel;
-    Button save;
+    private EditText editTitle;
+    private EditText editDesc;
+    private Button cancel;
+    private Button save;
+    private SharedPreferences pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form);
+        pref = getSharedPreferences("MY_DATA", MODE_PRIVATE);
+        String sTitle = pref.getString("Title", "");
+        String sDesc = pref.getString("Desc", "");
+
         if (getSupportActionBar() != null)
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-      editTitle = findViewById(R.id.editTitle);
-      editDesc = findViewById(R.id.editDesc);
-      cancel = findViewById(R.id.cancel);
-      save = findViewById(R.id.save);
 
+        editTitle = findViewById(R.id.editTitle);
+        editDesc = findViewById(R.id.editDesc);
+        cancel = findViewById(R.id.cancel);
+        save = findViewById(R.id.save);
+
+        editTitle.setText(sTitle);
+        editDesc.setText(sDesc);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId()==android.R.id.home)
+        if (item.getItemId() == android.R.id.home)
             finish();
         return super.onOptionsItemSelected(item);
     }
 
-    public  void onClickCancel(View view){
+    public void onClickCancel(View view) {
         finish();
     }
 
-    public  void onClickSave(View view){
-        Intent intent = new Intent();
-        String title = editTitle.getText().toString();
-        String desc = editDesc.getText().toString();
-        intent.putExtra(RESULT_KEY,title+"\n"+desc);
-        setResult(RESULT_OK,intent);
-        finish();
+    public void onClickSave(View view) {
 
+        String sTitle = editTitle.getText().toString().trim();
+        String sDesc = editDesc.getText().toString().trim();
+        Task task = new Task(sTitle, sDesc);
+        App.getDataBase().taskDao().insert(task);
+        setResult(RESULT_OK);
+        finish();
     }
+
 }

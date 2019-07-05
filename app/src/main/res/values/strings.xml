@@ -1,4 +1,4 @@
-<resources>
+    <resources>
     <string name="app_name">TaskApp_1</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -13,4 +13,29 @@
     <string name="menu_tools">Tools</string>
     <string name="menu_share">Share</string>
     <string name="menu_send">Send</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+        <string name="slide_1_title">Билеты на автобус</string>
+        <string name="slide_1_desc">Ознакомьтесь с наиболее привлекательными предложениеми
+        при бронировании билетов на автобус</string>
+
+
+        <string name="slide_2_title">Авиабилеты</string>
+        <string name="slide_2_desc">знакомьтесь с наиболее привлекательными предложениеми
+        при бронировании авиабилетов</string>
+
+        <string name="slide_3_title">Билеты на поезд</string>
+        <string name="slide_3_desc">знакомьтесь с наиболее привлекательными предложениеми
+        при бронировании билетов на автобусы</string>
+
+        <string name="slide_4_title">Билеты в кино</string>
+        <string name="slide_4_desc">знакомьтесь с наиболее привлекательными предложениеми
+        при бронировании билетов в кино</string>
+
+
+        <string name="my_preferance">com.abc.com.MyPref</string>
+        <string name="my_preferance_key">com.abc.com.MyPref_Key</string>
+
 </resources>
