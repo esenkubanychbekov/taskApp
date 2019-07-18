@@ -3,6 +3,8 @@ package com.e.taskapp_1;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -19,6 +21,8 @@ public class FormActivity extends AppCompatActivity {
     private Button cancel;
     private Button save;
     private SharedPreferences pref;
+    EditText textSize;
+    Task task;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,14 +35,24 @@ public class FormActivity extends AppCompatActivity {
         if (getSupportActionBar() != null)
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        task = (Task) getIntent().getSerializableExtra("task");
+
+        if (task!=null){
+            editTitle.setText(task.getTitle());
+            editDesc.setText(task.getDesc());
+        }
 
         editTitle = findViewById(R.id.editTitle);
         editDesc = findViewById(R.id.editDesc);
         cancel = findViewById(R.id.cancel);
         save = findViewById(R.id.save);
+        textSize = findViewById(R.id.editTextSize);
 
         editTitle.setText(sTitle);
         editDesc.setText(sDesc);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(FormActivity.this);
+        SharedPreferences.Editor editor = preferences.edit();
+
     }
 
     @Override
@@ -58,8 +72,8 @@ public class FormActivity extends AppCompatActivity {
         String sDesc = editDesc.getText().toString().trim();
         Task task = new Task(sTitle, sDesc);
         App.getDataBase().taskDao().insert(task);
-        setResult(RESULT_OK);
         finish();
+
     }
 
 }

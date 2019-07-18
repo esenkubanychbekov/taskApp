@@ -1,6 +1,8 @@
 package com.e.taskapp_1;
 
+import android.arch.lifecycle.Observer;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -9,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -36,7 +39,6 @@ public class MainActivity extends AppCompatActivity
 
     TaskAdapter adapter;
     List<Task> list;
-    TextView textView1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +56,6 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         FloatingActionButton fab = findViewById(R.id.fab);
-        textView1 = findViewById(R.id.textView1);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -78,24 +79,40 @@ public class MainActivity extends AppCompatActivity
         list = new ArrayList<>();
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        list.addAll(App.getDataBase().taskDao().getAll());
-        adapter = new TaskAdapter(list);
-        recyclerView.setAdapter(adapter);
-
-        for (Task task:list){
-            Log.e("TAG","task = "+task.getTitle());
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode == 100){
-            if (resultCode == RESULT_OK){
+        App.getDataBase().taskDao().getAll().observe(this, new Observer<List<Task>>() {
+            @Override
+            public void onChanged(@Nullable List<Task> tasks) {
                 list.clear();
-                list.addAll(App.getDataBase().taskDao().getAll());
+                list.addAll(tasks);
                 adapter.notifyDataSetChanged();
             }
-        }
+        });
+        adapter = new TaskAdapter(list);
+        recyclerView.setAdapter(adapter);
+       adapter.setClickListener(new ClickListener() {
+           @Override
+           public void onItemClick(int position) {
+
+           }
+
+           @Override
+           public void inItemLongClick(int possition) {
+              showAlert(list.get(possition));
+           }
+       });
+    }
+
+    private void showAlert(final Task task) {
+        AlertDialog.Builder builder= new AlertDialog.Builder(this);
+        builder.setMessage("Вы хотите удалить? \""+task.getTitle()+"\" ?")
+                .setTitle(task.getTitle())
+                .setNegativeButton("Отмена",null)
+                .setNegativeButton("Да", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+             App.getDataBase().taskDao().delete(task);
+            }
+        }).create().show();
     }
 
     @Override
