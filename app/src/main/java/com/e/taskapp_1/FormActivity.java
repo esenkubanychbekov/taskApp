@@ -1,16 +1,19 @@
 package com.e.taskapp_1;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class FormActivity extends AppCompatActivity {
 
@@ -18,22 +21,21 @@ public class FormActivity extends AppCompatActivity {
 
     private EditText editTitle;
     private EditText editDesc;
-    private Button cancel;
-    private Button save;
     private SharedPreferences pref;
-    EditText textSize;
+    private Button buttonSize;
     Task task;
+    AlertDialog alertDialog;
+    CharSequence[] values = {"20sp", "30sp", "40sp"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form);
-        pref = getSharedPreferences("MY_DATA", MODE_PRIVATE);
-        String sTitle = pref.getString("Title", "");
-        String sDesc = pref.getString("Desc", "");
 
-        if (getSupportActionBar() != null)
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        editTitle = findViewById(R.id.editTitle);
+        editDesc = findViewById(R.id.editDesc);
+        buttonSize = findViewById(R.id.buttonSize);
+        pref = getSharedPreferences("MY_DATA", MODE_PRIVATE);
 
         task = (Task) getIntent().getSerializableExtra("task");
 
@@ -42,17 +44,14 @@ public class FormActivity extends AppCompatActivity {
             editDesc.setText(task.getDesc());
         }
 
-        editTitle = findViewById(R.id.editTitle);
-        editDesc = findViewById(R.id.editDesc);
-        cancel = findViewById(R.id.cancel);
-        save = findViewById(R.id.save);
-        textSize = findViewById(R.id.editTextSize);
+        buttonSize.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-        editTitle.setText(sTitle);
-        editDesc.setText(sDesc);
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(FormActivity.this);
-        SharedPreferences.Editor editor = preferences.edit();
+                AlertDialogWarning();
 
+            }
+        });
     }
 
     @Override
@@ -70,10 +69,53 @@ public class FormActivity extends AppCompatActivity {
 
         String sTitle = editTitle.getText().toString().trim();
         String sDesc = editDesc.getText().toString().trim();
-        Task task = new Task(sTitle, sDesc);
-        App.getDataBase().taskDao().insert(task);
+
+        if (task !=null){
+            task.setTitle(sTitle);
+            task.setDesc(sDesc);
+            App.getInstance().getDataBase().taskDao().update(task);
+        } else
+        {
+            Task task = new Task();
+            task.setTitle(sTitle);
+            task.setDesc(sDesc);
+            App.getInstance().getDataBase().taskDao().insert(task);
+        }
+
+        if (sTitle.matches("")){
+            Toast.makeText(this, "Поле не должно быть пустым, Заполните поля Title и Descriptiom", Toast.LENGTH_SHORT).show();
+            return;
+        }
         finish();
 
+    }
+
+    public void AlertDialogWarning() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(FormActivity.this);
+        builder.setTitle("Выберите размер текста");
+        builder.setSingleChoiceItems(values, -1, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+                switch (item) {
+                    case 0:
+                        editTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                        editDesc.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                        break;
+                    case 1:
+                        editTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
+                        editDesc.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
+                        break;
+                    case 2:
+                        editTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 40);
+                        editDesc.setTextSize(TypedValue.COMPLEX_UNIT_SP, 40);
+                        break;
+                }
+                alertDialog.dismiss();
+
+            }
+        });
+        alertDialog = builder.create();
+        alertDialog.show();
     }
 
 }

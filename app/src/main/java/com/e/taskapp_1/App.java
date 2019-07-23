@@ -7,21 +7,25 @@ import android.arch.persistence.room.RoomDatabase;
 import com.e.taskapp_1.room.MyDataBase;
 
 public class App extends Application {
-    private static MyDataBase myDataBase;
+    private MyDataBase myDataBase;
     public static App instance;
+
+
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        instance = this;
+        myDataBase = Room.databaseBuilder(this,
+                MyDataBase.class, "mydatabase")
+                .allowMainThreadQueries().build();
+    }
 
     public static App getInstance() {
         return instance;
     }
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        myDataBase = Room.databaseBuilder(this,
-                MyDataBase.class, "mydatabase").allowMainThreadQueries().build();
-    }
-
-    public static MyDataBase getDataBase(){
+    public MyDataBase getDataBase(){
 
         return myDataBase;
     }

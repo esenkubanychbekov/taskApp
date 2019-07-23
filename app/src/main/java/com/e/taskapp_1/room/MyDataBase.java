@@ -5,7 +5,7 @@ import android.arch.persistence.room.RoomDatabase;
 
 import com.e.taskapp_1.Task;
 
-@Database(entities = {Task.class},version = 1)
+@Database(entities = {Task.class},version = 1, exportSchema = false)
 public abstract class MyDataBase extends RoomDatabase {
 
     public abstract TaskDao taskDao();

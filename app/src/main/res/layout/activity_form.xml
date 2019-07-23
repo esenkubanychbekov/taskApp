@@ -5,19 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="#FBFCFC"
     tools:context=".FormActivity">
 
     <EditText
         android:id="@+id/editTitle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        />
     <EditText
         android:id="@+id/editDesc"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <EditText
-        android:id="@+id/editTextSize"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
@@ -30,6 +27,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="@drawable/bg_button"
+            android:textColor="#E74C3C"
             android:onClick="onClickCancel"
             android:text="Отмена"/>
 
@@ -38,11 +37,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="onClickSave"
+            android:background="@drawable/bg_button"
+            android:textColor="#E74C3C"
             android:layout_weight="1"
             android:text="Сохранить"/>
 
-
-
     </LinearLayout>
+
+    <Button
+        android:id="@+id/buttonSize"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Размер текста"
+        android:layout_marginLeft="5dp"
+        android:background="@drawable/bg_button"
+        android:textColor="#E74C3C"
+        android:layout_marginTop="20dp"/>
+
+
 
 </LinearLayout>

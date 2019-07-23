@@ -1,4 +1,4 @@
-    <resources>
+<resources>
     <string name="app_name">TaskApp_1</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -6,7 +6,6 @@
     <string name="nav_header_subtitle">esen.kubanichbekov@gmail.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
-
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
@@ -17,25 +16,25 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-        <string name="slide_1_title">Билеты на автобус</string>
-        <string name="slide_1_desc">Ознакомьтесь с наиболее привлекательными предложениеми
+    <string name="slide_1_title">Билеты на автобус</string>
+    <string name="slide_1_desc">Ознакомьтесь с наиболее привлекательными предложениеми
         при бронировании билетов на автобус</string>
 
 
-        <string name="slide_2_title">Авиабилеты</string>
-        <string name="slide_2_desc">знакомьтесь с наиболее привлекательными предложениеми
+    <string name="slide_2_title">Авиабилеты</string>
+    <string name="slide_2_desc">знакомьтесь с наиболее привлекательными предложениеми
         при бронировании авиабилетов</string>
 
-        <string name="slide_3_title">Билеты на поезд</string>
-        <string name="slide_3_desc">знакомьтесь с наиболее привлекательными предложениеми
+    <string name="slide_3_title">Билеты на поезд</string>
+    <string name="slide_3_desc">знакомьтесь с наиболее привлекательными предложениеми
         при бронировании билетов на автобусы</string>
 
-        <string name="slide_4_title">Билеты в кино</string>
-        <string name="slide_4_desc">знакомьтесь с наиболее привлекательными предложениеми
+    <string name="slide_4_title">Билеты в кино</string>
+    <string name="slide_4_desc">знакомьтесь с наиболее привлекательными предложениеми
         при бронировании билетов в кино</string>
 
 
-        <string name="my_preferance">com.abc.com.MyPref</string>
-        <string name="my_preferance_key">com.abc.com.MyPref_Key</string>
+    <string name="my_preferance">com.abc.com.MyPref</string>
+    <string name="my_preferance_key">com.abc.com.MyPref_Key</string>
 
 </resources>

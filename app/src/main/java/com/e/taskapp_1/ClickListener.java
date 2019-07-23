@@ -4,5 +4,5 @@ public interface ClickListener {
 
     void onItemClick(int position);
 
-    void inItemLongClick(int possition);
+    void inItemLongClick(int position);
 }

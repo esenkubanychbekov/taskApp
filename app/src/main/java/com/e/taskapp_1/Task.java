@@ -6,17 +6,17 @@ import android.arch.persistence.room.PrimaryKey;
 import java.io.Serializable;
 
 @Entity
-public class Task {
+public class Task implements Serializable{
 
     @PrimaryKey (autoGenerate = true)
-    private long id;
 
-    private String title;
-    private String desc;
+    public long id;
 
-    public Task (String title, String desc) {
-        this.title = title;
-        this.desc = desc;
+    public String title;
+    public String desc;
+
+    public Task(){
+
     }
 
     public long getId() {
@@ -42,4 +42,5 @@ public class Task {
     public void setDesc(String desc) {
         this.desc = desc;
     }
+
 }

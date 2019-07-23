@@ -25,6 +25,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +34,9 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
@@ -39,32 +44,50 @@ public class MainActivity extends AppCompatActivity
 
     TaskAdapter adapter;
     List<Task> list;
+    RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
 
-        SharedPreferences pref = getSharedPreferences("MY_DATA",MODE_PRIVATE);
+        SharedPreferences pref = getSharedPreferences("login",MODE_PRIVATE);
         SharedPreferences preferences = getSharedPreferences("settings", Context.MODE_PRIVATE);
         boolean isShown = preferences.getBoolean("isShown",false);
         if (!isShown){
             startActivity(new Intent(this, OnBoardActivity.class));
             finish();
         }
+
+        boolean isRegistered = pref.getBoolean("isRegistered",false);
+        if (!isRegistered){
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+        }
+
+
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton sort = findViewById(R.id.sort);
+        sort.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-             // startActivity(new Intent(MainActivity.this, FormActivity.class));
-                Intent intent = new Intent(MainActivity.this, FormActivity.class);
-              startActivityForResult(intent,100);
 
             }
         });
+
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, FormActivity.class);
+                startActivityForResult(intent,100);
+
+            }
+        });
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -73,31 +96,47 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
         initList();
+
+        File folder = new File(Environment.getExternalStorageDirectory(), "My folder/Media/Images");
+        if (!folder.exists()) folder.mkdirs();
+        File file = new File(folder, "myFile.txt");
+        try {
+            file.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Ошибка" + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void initList() {
         list = new ArrayList<>();
-        RecyclerView recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        App.getDataBase().taskDao().getAll().observe(this, new Observer<List<Task>>() {
+        recyclerView = findViewById(R.id.recyclerView);
+        RecyclerView.LayoutManager manager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(manager);
+        adapter = new TaskAdapter(list);
+        recyclerView.setAdapter(adapter);
+
+        App.getInstance().getDataBase().taskDao().getAll().observe(this, new Observer<List<Task>>() {
             @Override
-            public void onChanged(@Nullable List<Task> tasks) {
+            public void onChanged(@Nullable List<Task> task) {
                 list.clear();
-                list.addAll(tasks);
+                list.addAll(task);
                 adapter.notifyDataSetChanged();
             }
         });
-        adapter = new TaskAdapter(list);
-        recyclerView.setAdapter(adapter);
        adapter.setClickListener(new ClickListener() {
            @Override
-           public void onItemClick(int position) {
-
+           public void onItemClick(int pos) {
+               Task task = list.get(pos);
+               Intent intent = new Intent(MainActivity.this, FormActivity.class);
+               intent.putExtra("task", task);
+               startActivity(intent);
            }
 
            @Override
-           public void inItemLongClick(int possition) {
-              showAlert(list.get(possition));
+           public void inItemLongClick(int position) {
+               Task task = list.get(position);
+              showAlert(task);
            }
        });
     }
@@ -110,9 +149,11 @@ public class MainActivity extends AppCompatActivity
                 .setNegativeButton("Да", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-             App.getDataBase().taskDao().delete(task);
+             App.getInstance().getDataBase().taskDao().delete(task);
+
             }
-        }).create().show();
+        });
+                builder.create().show();
     }
 
     @Override

@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.e.taskapp_1">
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name=".App"
@@ -15,8 +14,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".OnBoardActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".LoginActivity"></activity>
+        <activity
+            android:name=".OnBoardActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".FormActivity" />
         <activity
             android:name=".MainActivity"
