@@ -8,6 +8,13 @@
     android:padding="16dp"
     tools:context=".LoginActivity">
 
+    <LinearLayout
+        android:id="@+id/viewPhone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="15dp">
+
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="wrap_content"
@@ -18,13 +25,7 @@
         android:layout_gravity="center"
         android:background="@drawable/firebase" />
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/imageView"
-        android:orientation="vertical"
-        android:padding="15dp">
+
 
         <EditText
             android:id="@+id/editTextPhone"
@@ -45,6 +46,15 @@
             android:background="@drawable/bg_button"
             android:textAllCaps="false" />
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/viewCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical">
+
         <EditText
             android:id="@+id/editTextCode"
             android:layout_width="match_parent"
@@ -63,6 +73,8 @@
             android:text="Sign In" />
 
     </LinearLayout>
+
+
 
 
 </RelativeLayout>

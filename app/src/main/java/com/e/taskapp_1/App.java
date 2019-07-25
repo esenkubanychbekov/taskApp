@@ -1,8 +1,8 @@
 package com.e.taskapp_1;
 
 import android.app.Application;
-import android.arch.persistence.room.Room;
-import android.arch.persistence.room.RoomDatabase;
+import androidx.room.Room;
+import androidx.room.RoomDatabase;
 
 import com.e.taskapp_1.room.MyDataBase;
 
